@@ -12,7 +12,7 @@ const App = () => {
       {/* Komponen WebView Fabric */}
       <View style={styles.webViewContainer}>
         <WebView
-          source={{ uri: 'https://example.com' }}
+          source={{ uri: 'https://www.unla.ac.id' }}
           style={styles.flexOne}
           javaScriptEnabled={true}
           startInLoadingState={true}
