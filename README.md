@@ -1,97 +1,179 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# 🌐 Portal Kampus - WebView Fabric App
 
-# Getting Started
+A modern WebView mobile application built with **React Native CLI (New Architecture / Fabric)** to access the campus portal (**Universitas Langlangbuana - UNLA**). Equipped with full navigation controls, hardware back button support, and native performance.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+## ✨ Features
 
-## Step 1: Start Metro
+- 🏛️ **Campus Portal Access**: Direct integration with [UNLA Portal](https://www.unla.ac.id) via React Native WebView.
+- ⚡ **New Architecture (Fabric)**: Optimized performance with React Native's modern Fabric rendering engine.
+- 🧭 **Bottom Navigation Bar**: Clean bottom controls for intuitive browser navigation:
+  - **Prev**: Navigate back to previous page (auto-disabled at start of history).
+  - **Reload**: Refresh current web page.
+  - **Next**: Navigate forward in history (auto-disabled when no forward history).
+- 🔙 **Android Hardware Back Handler**: Intercepts Android physical/gesture back button to navigate history before exiting the app.
+- 📱 **Responsive & Clean UI**: Styled with `SafeAreaView` and consistent theme colors.
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+## 🛠️ Tech Stack
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+| Tech | Version |
+|------|---------|
+| React Native | 0.87.1 (Fabric / New Architecture) |
+| React | 19.2.3 |
+| react-native-webview | ^14.0.1 |
+| react-native-safe-area-context | ^5.5.2 |
+| TypeScript | ^6.0.3 |
 
-```sh
-# Using npm
+## 📁 Project Structure
+
+```
+TugasWebViewFabric/
+├── android/                   # Native Android project files & Gradle build
+├── ios/                       # Native iOS project files & Podfile
+├── __tests__/                 # Jest unit tests
+├── App.tsx                    # Main app component — WebView & navigation logic
+├── index.js                   # Application entry point
+├── app.json                   # React Native app configuration
+├── metro.config.js            # Metro bundler configuration
+├── babel.config.js            # Babel compiler configuration
+├── tsconfig.json              # TypeScript configuration
+└── package.json
+```
+
+## ⚙️ Prerequisites
+
+Ensure you have the following installed on your development machine:
+
+- [Node.js](https://nodejs.org/) (>= 22.11.0 recommended)
+- [JDK 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html) (Amazon Corretto 17 or OpenJDK 17)
+- [Android Studio](https://developer.android.com/studio) with:
+  - Android SDK Platform (API 34 / 35)
+  - Android SDK Build-Tools
+  - Android Virtual Device (AVD) or physical Android device with USB Debugging enabled
+- Package manager: **npm** or **bun**
+
+---
+
+## 🔧 Setup
+
+### 1. Clone the repository
+
+```bash
+git clone <your-repo-url>
+cd TugasWebViewFabric
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+# or
+bun install
+```
+
+---
+
+## 🚀 Running the App
+
+Unlike Expo projects, this app uses the **React Native Community CLI**. It compiles native Android/C++ code directly.
+
+### Step 1: Configure Android Environment Variables (Linux / macOS)
+
+Add these to your `~/.bashrc`, `~/.zshrc`, or profile file:
+
+```bash
+export ANDROID_HOME=$HOME/Android/Sdk
+export PATH=$PATH:$ANDROID_HOME/emulator
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+```
+
+Then reload your shell:
+
+```bash
+source ~/.bashrc
+# or
+source ~/.zshrc
+```
+
+Verify your device/emulator is detected:
+
+```bash
+adb devices
+# Expected output:
+# List of devices attached
+# emulator-5554   device (or your physical device ID)
+```
+
+### Step 2: Start Metro Bundler
+
+In the first terminal window, start the Metro server:
+
+```bash
 npm start
-
-# OR using Yarn
-yarn start
+# or
+bun run start
 ```
 
-## Step 2: Build and run your app
+### Step 3: Build and Run on Android
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+In a second terminal window (or let Metro automatically launch it), run:
 
-### Android
-
-```sh
-# Using npm
+```bash
 npm run android
-
-# OR using Yarn
-yarn android
+# or
+bun run android
 ```
 
-### iOS
+> **Note:** The first build may take a few minutes as Gradle downloads dependencies and compiles native Fabric/C++ components. Subsequent builds will be much faster.
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
+---
 
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
+## 📜 Available Scripts
 
-```sh
-bundle install
+```bash
+npm start              # Start Metro bundler
+npm run android        # Compile and install app on Android device/emulator
+npm run ios            # Compile and run on iOS (macOS only)
+npm run lint           # Run ESLint validation
+npx tsc --noEmit       # Run TypeScript type check
+npm test               # Run Jest tests
 ```
 
-Then, and every time you update your native dependencies, run:
+---
 
-```sh
-bundle exec pod install
+## 🐛 Troubleshooting
+
+**1. Gradle build fails or dependencies conflict**
+Clean the Android Gradle build cache and retry:
+```bash
+cd android
+./gradlew clean
+cd ..
+npm run android
 ```
 
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
-
-```sh
-# Using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
+**2. Metro port 8081 is already in use**
+Kill any existing process on port 8081:
+```bash
+npx react-native start --port 8088
+# or kill the process:
+lsof -i :8081 | awk 'NR>1 {print $2}' | xargs kill -9
 ```
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+**3. Device or emulator not detected**
+Restart the ADB daemon:
+```bash
+adb kill-server && adb start-server
+adb devices
+```
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+**4. Metro cache issues**
+Start Metro with cache cleared:
+```bash
+npx react-native start --reset-cache
+```
 
-## Step 3: Modify your app
+---
 
-Now that you have successfully run the app, let's make changes!
+## 📄 License
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
-
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
-
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+Built for **Mobile Programming** coursework.
